@@ -1,186 +1,168 @@
-# VOXCHAIN
+# Voxchain
 
-**Live: <https://voxchain.arrangedgodly.com/>**
+### Build the vocal sound you hear in your head.
 
-A live vocal chain in your browser for karaoke, streaming, games, and voice experiments: mic in → 14 effects → your output. Nothing to install, no account, no cloud — the whole engine runs on your machine, and an AI agent in the browser can build and edit the chain from plain language via [WebMCP](https://developer.chrome.com/docs/ai/webmcp).
+A live browser vocal-effects chain for karaoke, streaming setups, and voice experiments. Choose a ready-made sound, build an effect chain yourself, or ask a compatible browser agent to work with the same controls through WebMCP.
 
-![VOXCHAIN Advanced view showing the live microphone chain, factory preset library, ordered effect modules, safety limiter, and effect palette](docs/screenshot-advanced.png)
+**[Open Voxchain](https://voxchain.arrangedgodly.com/) · [Watch the demo](https://youtu.be/chm-IvQGqzQ) · [Controls](#build-a-chain-in-advanced) · [Agent tools](#work-with-a-browser-agent) · [Run locally](#run-locally)**
 
-## Features
+![Voxchain Advanced view with its ordered effect chain and palette](docs/screenshot-advanced.png)
 
-- **14 effects** — gain, compressor, EQ, delay, reverb, limiter, noise gate, distortion, chorus, autotune, pitch shift, tremolo, bitcrusher, and phaser — arranged in a left-to-right chain you control.
-- **Two views** — **Simple** for picking a sound from a filterable library; **Advanced** for building the chain by hand.
-- **33 factory presets** — from Classic Karaoke and Warm Ballad to Robot Usher and Hiss Rescue, with room for your own.
-- **Plain-language agent control** — a ChatGPT/Codex in-app browser can build and tune the chain while you watch, with a plain-English summary and one-click **Undo** on every change.
-- **A safety floor** — the limiter always stays last, a fixed output ceiling and feedback watchdog are always on, and the emergency **Bypass** (button or spacebar) is yours alone.
-- **No install, no build** — static files; the local start scripts use only Python's built-in web server.
+## Start with your voice
 
-## Quickstart
+1. Put on headphones and keep your monitoring level low.
+2. Open the live site in Chrome and press **Start**.
+3. Acknowledge the first-start headphone notice, then allow microphone access when your browser requests it.
+4. Select the intended microphone. Multi-input devices expose a channel selector.
+5. Try a factory sound in **Simple**, or open **Advanced** to edit the individual effects.
 
-**On the live site:**
+Audio capture needs HTTPS or localhost. **Stop** ends the microphone session and disconnects output. **Bypass** sends the raw microphone to the output; it is not a mute button.
 
-1. Open **https://voxchain.arrangedgodly.com/** in Chrome.
-2. Press **Start** in the top bar and allow microphone access when the browser asks.
-3. Try sounds from the library — or switch to **Advanced** and build your own chain.
+## Pick a sound in Simple
 
-**From this repo:**
+![Voxchain Simple view with the current sound and searchable preset library](docs/screenshot-simple.png)
 
-1. Clone or download it.
-2. Double-click `start.bat` (Windows) or `start.command` (macOS). On the first run macOS may block the script — right-click it and choose **Open**.
-3. Your browser opens at `http://localhost:8000` — press **Start** and allow the mic. If you have more than one microphone, pick it from the dropdown next to Start.
+Simple keeps the important session controls available while reducing sound design to a searchable library.
 
-The only local requirement is Python (free from [python.org/downloads](https://www.python.org/downloads/); on Windows, tick "Add Python to PATH" during install). See [Running a live show](#running-a-live-show) for full operator notes.
-
-## Two views
-
-**Simple** (the default) is for choosing a sound, not building one. A stage names the **current sound** with **Previous/Next** buttons stepping through the library; filter chips (**All, Warm, Big echo, Funny, Clean & clear**) and a search box narrow it — the search reads each sound's name, description, and tags, so words the chips don't carry ("robot", "deep") still find their sounds. Every factory and saved preset is a card — click one to try it. What Simple never hides: **Start/Stop**, the mic picker, **Bypass**, and the input/output meters.
-
-![VOXCHAIN Simple view showing the Warm Ballad current sound, plain filters, searchable factory library, effect summary, and persistent safety controls](docs/screenshot-simple.png)
-
-**Advanced** is the hands-on builder:
-
-- The **Effects** panel under the board holds the 14 effects. **Click a chip to add it** — new effects land just before the limiter so it stays last — or drag one onto the board to place it exactly where you want it. The board reads left to right, mic in at the left end and safe out at the right, with a chevron drawn between adjacent cards; the signal-order strip under the board spells out the whole path.
-- **Reorder by dragging** — pick a card up by its grip rail and drop it at a new slot in the row. A dashed placeholder previews the landing, the sound changes only when the drop completes, and **Escape** puts the card back with nothing changed. Prefer keys? Focus a card's grip and press **Alt+Left/Alt+Right** to walk it through the chain.
-- **Resize a card** by dragging the machined corner at its bottom-right. Resizing never changes your sound, and saved widths come back with your chain.
-- **IN** on a card bypasses that one effect (it shows **BYP**; click again to return it). **×** removes a card; the chevron collapses its controls while the effect keeps working.
-- **Nothing you do by hand is a one-way door.** Every structural edit you make — adding, moving, or removing an effect, or trying a sound — pops a small card at the bottom-right naming the edit ("Add Reverb") with an **Undo** key. **Ctrl/Cmd+Z** (Windows/Mac) takes the same steps back from the keyboard, one edit at a time, long after the card is gone.
-- Meters on the **MIC IN** and **OUT** strips show live levels — one strip above the row, one below — and both stay put even when the chain is longer than the screen.
-
-Switch views from the top bar any time; your choice is remembered.
-
-## The effects
-
-| Effect | What it does |
+| Control | What it does |
 | --- | --- |
-| Gain | Sets the level feeding the chain. |
-| Compressor | Evens out loudness between quiet and loud singing. |
-| EQ | Low, mid, and high tone shaping. |
-| Delay | Echo, from short slap-back to longer repeats. |
-| Reverb | Room ambience, from a tight space to a cathedral. |
-| Limiter | Caps the output level; always the last node in every chain. |
-| Noise Gate | Mutes the mic between phrases — built for noisy rooms. |
-| Distortion | Grit and edge, from light warmth to a full roar. |
-| Chorus | Thickens and widens the voice with two drifting copies of it. |
-| Autotune | Pulls each note toward the key and scale you pick. |
-| Pitch Shift | Moves the voice up or down in semitones. |
-| Tremolo | Volume wobble at an adjustable rate and depth. |
-| Bitcrusher | Lo-fi digital grunge by reducing the bit depth. |
-| Phaser | A slow, spacey sweep of filter notches. |
+| **Previous / Next** | Steps through sounds. |
+| **Search** | Finds matches in preset names, descriptions, and tags. |
+| **All / Warm / Big echo / Funny / Clean & clear** | Narrows factory sounds by a plain-language character. |
+| **Preset card** | Loads that sound into the active chain. |
+| **Auto Gain** | Learns an input adjustment from phrases and pauses, then holds the learned level. |
+| **Recheck microphone** | Starts input calibration again. Changing microphones also resets learning. |
+| **Start / Stop, mic picker, Bypass, meters** | Remain directly accessible while browsing. |
 
-A few honest notes:
+There are **33 factory presets**, including Classic Karaoke, Studio Polish, Robot Usher, Hiss Rescue, and Double Track. Simple carries its session Auto Gain adjustment between sounds. Advanced loads the preset's own chain instead of silently adding that utility.
 
-- **Noise Gate** defaults are gentle. If it chops the ends off words, lengthen **Release**.
-- **Distortion** has no perfectly clean zero — Drive at 0 still colors the sound slightly. For a clean comparison, use **Bypass**.
-- **Autotune** carries an **Experimental** badge and adds a fixed 20 ms delay (a fiftieth of a second) — expected behavior, not a fault. Pick the song's actual key; a wrong key gives the classic wrong-key robot sound (which is a choice, if you mean it). **Retune Speed** runs from instant hard-tune snap to a gentle glide.
-- **Pitch Shift** covers ±12 semitones but stays most intelligible within about ±7.
-- **Chorus** and **Phaser** are stereo effects — they show best on headphones or a stereo PA.
+## Build a chain in Advanced
 
-## Presets
+Read the chain from left to right. A signal-order strip spells out the path, and the input/output meters stay visible while the chain scrolls.
 
-The app ships with **33 factory presets** grouped by what you're doing: cleanup first (Hiss Rescue, Room Announcer), then performance, speech and hosting, genres, vibes, and gag sounds (Robot Usher, Chipmunk Party, Dark Helmet Baritone…). They're load-only starting points — try them from Simple, or use the **Presets** panel in Advanced.
+| Gesture or control | Result |
+| --- | --- |
+| **Click an effect chip** | Adds it to the chain, before an existing terminal limiter. |
+| **Drag a palette chip** | Places the new effect at a chosen slot. |
+| **Drag a card's grip** | Reorders the chain. Escape cancels the drag. |
+| **Alt + Left / Right on a focused grip** | Reorders with the keyboard. |
+| **IN / BYP** | Bypasses only that effect, keeping its settings. |
+| **×** | Removes the card. |
+| **Chevron** | Collapses the controls without changing whether the effect is active. |
+| **Bottom-right resize handle** | Changes the card width without changing the sound. |
+| **Undo / Ctrl or Cmd + Z** | Uses the shared edit history, including manual and agent changes. |
 
-Once you have a sound you like, **Save As…** stores it under your own name (including each effect's IN/BYP state). Bring one back with a click in the searchable preset list — factory sounds grouped by category, then **Yours** below them; each of your own sounds carries a **Delete** (click twice — the first click asks "Confirm delete" and backs off if you change your mind or wait five seconds). Your chain also **autosaves** as you go, so if the app closes by accident, reopening picks up right where you left off.
+The shared Undo stack retains up to 20 entries. When a later human edit conflicts with a restoration, the interface can ask for **Undo anyway** rather than silently replacing the newer work.
 
-## Agent control
+## Fourteen effects, plus Auto Gain
 
-The app registers ten tools with the browser using **WebMCP** — no MCP server, package, manifest, API key, or browser extension. A supported ChatGPT or Codex in-app browser discovers them automatically while the page is open, and you can then work the app in plain language while manual control stays available at all times.
+| Job | Effects and controls |
+| --- | --- |
+| **Set the input** | Gain; Auto Gain with learned level or manual adjustment. |
+| **Control dynamics** | Compressor; Noise Gate with release control; Limiter. |
+| **Shape the tone** | Three-band EQ; Distortion; Bitcrusher. |
+| **Add space** | Delay; fixed plate Reverb with mix control. |
+| **Add movement** | Chorus; Tremolo; Phaser. |
+| **Change pitch** | Pitch Shift; experimental Autotune with key, scale, and retune controls. |
 
-The fastest way to see it:
+Autotune introduces a fixed 20 ms delay in addition to the rest of the capture/output path. Overall latency depends on the browser, hardware, and chain. Pitch-based effects, gates, and feedback effects still need a listening check on the actual setup.
 
-1. Open **https://voxchain.arrangedgodly.com/** in the ChatGPT (or Codex) in-app browser and press **Start**.
-2. Ask: *"Make my voice really big and echoey, but keep it clear."* Watch the chain update, with a plain-English summary toast and a one-click **Undo**.
-3. Use **Undo**, then ask: *"Remove the terminal limiter."* The app refuses, shows what was asked versus what's allowed, and the limiter stays.
-4. Toggle **Bypass** off and on, then press **Stop**. These immediate audio controls remain human-only.
+## Save, share, and return to a sound
 
-Watch the public 2:56 demo: **https://youtu.be/chm-IvQGqzQ**
+| Action | What is retained or shared |
+| --- | --- |
+| **Save As…** | A named personal preset, including each effect's bypass state. |
+| **Chain autosave** | Accepted chain and layout state in this browser's local storage. |
+| **Copy link** | A saved personal preset's versioned settings in the link's URL fragment. No recorded audio or microphone IDs. |
+| **Add to my sounds** | Saves an incoming shared sound without automatically loading it. |
+| **Name collision choices** | Rename, replace, or cancel when saving an incoming preset. |
 
-**No agent handy?** Open the site with **`?dev`** — an **Agent Harness** panel appears where you can run all ten tools directly with example inputs. Start with `get_capabilities`, then `set_chain` (prefilled with a valid example), then hit Undo.
+Storage failures are surfaced in the interface. If autosave fails, current edits may be lost on reload. Copy shared links from the deployed site, since a link made on localhost points back to localhost.
 
-<details>
-<summary>Optional Chrome diagnostics</summary>
+Voxchain currently focuses on live processing and settings sharing. This app does not provide a production audio recorder or WAV/MP3 export workflow.
 
-Useful for development, not required for the in-app-browser path above:
+## Work with a browser agent
 
-1. Go to `chrome://flags/#enable-webmcp-testing`, set it to **Enabled**, restart Chrome, and open the app.
-2. DevTools (**F12**) → **Application** → **WebMCP** lists the ten tools and lets you run any of them by hand.
-3. Optionally install the **Model Context Tool Inspector** extension to exercise the tools through a development agent.
+Voxchain exposes ten tools through an in-page WebMCP adapter. The browser must expose a compatible model-context API. The app itself includes no language model, chat service, API key, or separate MCP server process. Without WebMCP, manual controls remain usable.
 
-</details>
+An example request:
 
-**Under the hood**, agents and humans drive the same chain through one shared mutation path: [`src/mcp-tools.js`](src/mcp-tools.js) defines the ten tools and their safety policy, [`src/chain-editing.js`](src/chain-editing.js) is the single mutation interface shared by human gestures, agent edits, preset loads, and Undo, and [`src/mcp-server.js`](src/mcp-server.js) is the small in-page registration adapter. The app itself is **LLM-free** — no API keys, no cloud calls; it supplies the audio vocabulary and enforces the safety contract, and all the intelligence runs in the agent's (or your) hands.
+> Make my voice big and echoey, but keep the words clear.
 
-## Safety: who controls what
+The preset-first workflow lets an agent inspect concise preset summaries, load a close starting point, and make targeted adjustments. The app validates the requested parameters and routes accepted edits through the same chain-editing transaction layer used by manual changes.
 
-**You can do everything:** build, reorder, tune, bypass effects, save presets, start and stop the engine, pick the mic, hit emergency Bypass.
+| Tool | Purpose |
+| --- | --- |
+| `get_capabilities` | Read supported effects, parameters, and agent limits. |
+| `get_chain` | Inspect the current ordered chain. |
+| `set_chain` | Replace the chain with a validated configuration. |
+| `add_node` / `remove_node` | Add or remove an effect within the agent policy. |
+| `set_param` | Change a supported parameter. |
+| `list_presets` / `get_preset` | Discover summaries, then inspect full preset data. |
+| `load_preset` / `save_preset` | Apply or save a sound. |
 
-**An agent can:** read the chain, presets, and capabilities; add, remove, and reorder effects and set parameters within published safety limits; retrieve, load, and save presets.
+Read tools can work before audio starts. Audio edits require the engine to be running. Start/Stop, microphone selection, emergency Bypass, and watchdog restoration remain human controls rather than agent tools.
 
-**An agent cannot:**
+The tools enforce an active terminal limiter, chain-size and gain/feedback limits, and validated parameter ranges. Rejected requests provide corrective detail. These are agent-editing constraints, not a guarantee that every manual chain or physical monitoring arrangement is safe.
 
-- Touch the red emergency **Bypass** — it works from the button or the **spacebar**, always.
-- Start or stop the engine, or pick the microphone.
-- Edit anything before you press Start — mutations are refused with a stable `ENGINE_NOT_STARTED` result until the engine is live (reads work any time).
+For development, append `?dev` to open the Agent Harness and exercise tools directly. See the [preset-first design decision](docs/adr/0003-preset-first-agent-strategy.md) for the reasoning behind smaller, targeted tool calls.
 
-**Hard invariants, for everyone:**
+## Monitoring and safety boundaries
 
-- Every chain keeps its **limiter** as the terminal node — removal requests are refused.
-- A fixed **−6 dBFS host attenuator** (output ceiling) is always on and not adjustable.
-- A **watchdog** mutes the output if something starts to howl — restoring it is human-only.
-- Every agent mutation gets a change-summary toast with one-click **Undo** — and so does every structural edit you make yourself (add, move, remove, or trying a sound). **Ctrl/Cmd+Z** reaches the same shared undo stack at any time, whoever made the edit.
+- Use headphones while testing. A limiter or watchdog cannot prevent an acoustic feedback loop between speakers and an open microphone.
+- Emergency Bypass is an independent, raw-microphone path. It bypasses the processed chain and is intentionally outside watchdog muting. Use **Stop** to end the session.
+- The processed path includes output attenuation and protection mechanisms. Do not interpret these as a universal guarantee about sound pressure or true-peak levels.
+- Background scheduling and worklet availability affect watchdog behavior. Test the actual browser, device, and venue setup before a live performance.
 
-## The ten tools
+The [manual acceptance guide](docs/ACCEPTANCE.md) covers real microphone/PA testing, audible transitions, scheduling, and hidden-tab behavior that source tests cannot establish alone.
 
-Registered by the app for in-browser agents:
+## How it is built
 
-| Tool | Kind | What it does |
+| Layer | Technology | Responsibility |
 | --- | --- | --- |
-| `get_capabilities` | read | Policy ranges, or a sound-design guide mapping plain-language goals ("warm", "lo-fi", "robotic"…) to safe effect settings. |
-| `get_chain` | read | The live chain in the exact shape `set_chain` accepts. |
-| `set_chain` | write | Replace the whole chain in one validated pass. |
-| `add_node` | write | Insert one effect node (position optional). |
-| `remove_node` | write | Remove one node — refused if it breaks a chain rule. |
-| `set_param` | write | Set one parameter, ramped smoothly where the platform allows. |
-| `list_presets` | read | The factory library plus your saved presets. |
-| `get_preset` | read | One preset's full chain, without loading it. |
-| `load_preset` | write | Load a listed preset as the live chain, with summary toast and Undo. |
-| `save_preset` | write | Save the current chain as a named preset. |
+| **Interface** | HTML, CSS, plain JavaScript | Simple/Advanced views, cards, presets, meters, and session controls. |
+| **Audio** | Web Audio + AudioWorklets | Microphone processing, graph construction, specialized DSP, and monitoring. |
+| **Selected effects** | Vendored Tone.js | Pitch Shift, Tremolo, Bitcrusher, and Phaser implementations. |
+| **Shared editing** | `ChainEditing` | Accepted state, parameter updates versus graph rebuilds, rollback, persistence, and Undo. |
+| **Agent integration** | In-page WebMCP registration + tool validators | Runtime discovery and bounded edits to the same chain. |
+| **Persistence** | localStorage | Named presets, chain/layout state, and interface preferences. |
+| **Tests** | Node.js test runner with browser stubs | Tool contracts, lifecycle races, rollback, graph reuse, presets, Auto Gain, and sharing. |
 
-## Running a live show
+Manual and agent chain edits converge on `src/chain-editing.js`. Audio graph nodes are reused only when both their ID and type match. Parameter-only updates can avoid a structural rebuild; structural edits use the accepted-state and rollback path.
 
-The app is the same deployed or local — this section is about getting it onto the laptop at the venue, which may have no internet.
+## Run locally
 
-**Before the event:**
+The application can run from a static server without a frontend build. Python provides a convenient local server:
 
-- Use the laptop's **Chrome** browser (other browsers haven't been tested).
-- Plug in the mic and speakers/PA before starting.
-- Python only needs to be present for the start script; if it's missing, the script says so — install it free from [python.org/downloads](https://www.python.org/downloads/).
-
-**Starting up:**
-
-1. Double-click `start.bat` (Windows) or `start.command` (Mac). If macOS says "permission denied," run `chmod +x start.command` on it once (drag the file into Terminal after typing `chmod +x `), then double-click again.
-2. Press **Start** and allow microphone access; pick the right mic from the dropdown if there's more than one.
-
-> [!NOTE]
-> Keep the terminal window the start script opened running in the background — closing it shuts the app down. If the browser doesn't open by itself, go to `http://localhost:8000`.
-
-**Start becomes Stop while running.** Pressing **Stop** releases the microphone and silences all output, including Bypass and effect tails; **Start** resumes with the same sound and layout, including edits that could not autosave. An autosave warning stays visible until a save succeeds — those edits won't survive a page reload. The status strip across the top shows **Stopped/Live** plus sample rate, latency, and how many effects are in the chain.
-
-> [!WARNING]
-> **If anything sounds wrong, hit Bypass first and investigate later.** The big red **Bypass** button (top right) — or just the **spacebar** — instantly cuts every effect and sends the raw, clean mic straight through. Hit it again to bring your chain back. Better a plain mic than a bad sound in front of a room full of people.
-
-**If something's not working:**
-
-- **No sound:** check the mic dropdown and that the browser got mic permission (camera/mic icon in the address bar).
-- **Browser didn't open:** open Chrome and go to `http://localhost:8000`.
-- **"Python not found":** see the Python note above.
-- **Still stuck:** hit Bypass so the show goes on with a clean mic, and sort it out at the break.
-
-## Development
-
-```sh
+```bash
 git clone https://github.com/ArtofFish/voxchain.git
 cd voxchain
-npm test
+python3 -m http.server 8000
 ```
 
-The test suite has zero dependencies — Node alone, from a clean clone — and CI runs it on every pull request. Vendored third-party pieces (Tone.js, the reverb impulse response, the test vocal) and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+On Windows, use the corresponding installed Python command, such as `py -m http.server 8000`. Open `http://localhost:8000`, then follow the headphone and microphone steps above. The repository also contains `start.bat` and `start.command` launchers.
+
+Install Node.js to run tests or the static build; CI uses Node 22. These two scripts use Node built-ins and do not require `npm install`.
+
+| Command | Purpose |
+| --- | --- |
+| `npm test` | Runs the repository's Node test runner. |
+| `npm run build` | Creates the static deployment output in `dist/`. |
+
+The test runner has no separate test-package dependency and CI uses Node 22. Deployment tooling is separate from the simple local static-server path. Chrome is recommended; this README does not claim comprehensive cross-browser or physical-device verification.
+
+<details>
+<summary><strong>Source guide</strong></summary>
+
+| Area | File |
+| --- | --- |
+| Session controls | [`src/main.js`](src/main.js) |
+| Advanced chain interface | [`src/canvas.js`](src/canvas.js) |
+| Simple sound browser | [`src/simple-view.js`](src/simple-view.js) |
+| Shared edit transactions | [`src/chain-editing.js`](src/chain-editing.js) |
+| Audio graph / raw Bypass | [`src/audio-graph.js`](src/audio-graph.js), [`src/audio-bypass.js`](src/audio-bypass.js) |
+| Agent registration / policy | [`src/mcp-server.js`](src/mcp-server.js), [`src/mcp-tools.js`](src/mcp-tools.js) |
+| Preset sharing | [`src/preset-link.js`](src/preset-link.js) |
+| Tests | [`tests/run.js`](tests/run.js) |
+
+</details>
